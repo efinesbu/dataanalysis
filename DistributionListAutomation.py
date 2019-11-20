@@ -48,16 +48,3 @@ remove.to_excel(writer, sheet_name='Remove', index=False) # Save audit file, wil
 writer.save()
 writer.close()
 
-
-######################################
-
-# import matplotlib.pyplot as plt
-#
-# points = np.arange(-5,5,0.01)
-# x, y = np.meshgrid(points,points)
-# z = np.sqrt(x**2+y**2)
-#
-# plt.imshow(z, cmap=plt.cm.gray);plt.colorbar()
-# plt.title("Plot of $\sqrt{x^2 + y^2}$ for a grid of values")
-#
-# plt.show()
