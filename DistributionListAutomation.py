@@ -14,13 +14,13 @@ import numpy as np
 import pandas as pd
 from datetime import date
 
-roster_location = 'C://Users/fine/Downloads/roster.csv' # Downloaded roster location
+roster_location = 'C:/Users/efine/Downloads/roster.csv' # Downloaded roster location
 roster_table = pd.read_csv(roster_location, usecols=["Email", "SID"]) # Only read in SID & Email columns
 roster_table = roster_table.dropna(subset=['Email']) # Remove rows with missing emails
 roster_table = roster_table.drop_duplicates(subset="SID") # Remove any potential duplicates
 roster_SIDs = np.array(roster_table["SID"]) # Select SIDs
 
-dl_location = 'C://Users/fine/Downloads/distributionlist.xlsx' # Download roster location
+dl_location = 'C:/Users/efine/Downloads/distributionlist.xlsx' # Download roster location
 dl_table = pd.read_excel(dl_location, usecols="C") # Only read SIDs
 dl_SIDs = np.array(dl_table["SID"]) # Select SIDs
 
@@ -29,14 +29,14 @@ removed_mem = dl_SIDs[np.in1d(dl_SIDs, roster_SIDs,invert=True)] # Find removed 
 new_mem_count = len(new_mem) # New member count
 removed_mem_count = len(removed_mem) # Removed member count
 
-audit_location = 'C://Users/fine/PycharmProjects/dataanalysis/About Python/audit.xlsx' # CSV location of audit
+audit_location = 'C://Users/efine/PycharmProjects/dataanalysis/About Python/audit.xlsx' # CSV location of audit
 writer = pd.ExcelWriter(audit_location, engine='xlsxwriter')
 
-audit_table = pd.read_excel(audit_location)
-audit_log = pd.DataFrame({'Added': [new_mem_count], # Place audit data into DataFrame structure so it can be appended
+audit_table = pd.read_excel(audit_location) #EXISTING TITLES
+audit_log = pd.DataFrame({'Added': [new_mem_count], # Place audit data into DataFrame structure so it can be appended (THIS ARE NEW TITLES)
                           'Removed': [removed_mem_count],
                           'Date': [date.today()]})
-appended_audit = audit_table.append(audit_log, sort=False) # Add new audit to existing log
+appended_audit = audit_table.append(audit_log, sort=False) # Add new audit to existing log (EXISTING + NEW), false keeps the original column order
 appended_audit.to_excel(writer, sheet_name='Audit', index=False) # Save audit file
 
 add = pd.DataFrame({"Add": new_mem})
