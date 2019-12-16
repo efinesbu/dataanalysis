@@ -43,8 +43,8 @@ def addImg(imgList):
         'Label': imgPath,
         'ImgData': img_gray,
         'MetaData': {
-            'Recommendations': ["Text TBD"],
-            'Users': ["Advisor ID TBD"]
+            'Recommendations': [],
+            'Users': []
          }
     })
     save(imgList)
@@ -57,6 +57,7 @@ def showImg(imgData):
 
 ##################################################################################
 # MAIN
+
 
 imgList = load()
 
@@ -86,10 +87,14 @@ print()
 #             'Label': "Emil Fine Image",
 #             'ImgData': img_gray,
 #             'MetaData': {
-#                 'Recommendations': ["Some Text"],
-#                 'Users': ["Advisor ID"]
+#                 'Recommendations': [],
+#                 'Users': []
 #                         }}
 #                 ]
 #
 # save(imgList)
 ##################################################################################
+
+# TO DO
+# Confirm link works
+# Resize if necessary
