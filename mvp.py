@@ -15,9 +15,9 @@ pd.set_option('display.max_rows', 40)
 
 # ADD NEW RECOMMENDATION
 def addRec(dict):
-    rec = input("Add new recommendation: ")
-    dict['MetaData']['Recommendations'].append(rec)
-    print(dict['MetaData']['Recommendations'])
+    dict['MetaData'][int(imagechoice)-1]['Recommendations'].append(input("Enter your recommendation: "))
+    dict['MetaData'][int(imagechoice) - 1]['Recommendations'].append(input("Enter your ID: "))
+    save(dict)
 
 # SAVE in H5F Format
 def save(dict):
@@ -57,7 +57,7 @@ dict = load()
 # print(dict['IDs'])
 # print(dict['MetaData'])
 # print(dict['Label'])
-print(dict['MetaData'][0])
+# print(dict['MetaData'][0])
 
 # if input("Add new image? y/n: ").lower() == 'y'.strip():
 #     imgData = addImg(dict)
@@ -67,10 +67,11 @@ print(dict['MetaData'][0])
 #     imagechoice = input("Which image would you like to see?: [enter ID #] ")
 #     showImg(dict['ImgData'][int(imagechoice)-1])
 
-# if input("Would you like to add recommendation? y/n: ").lower() == 'y'.strip():
-#     imagechoice = input("Which image would you like to add a recommendation to?: [enter image ID #] ")
-#     dict['MetaData'][]....
-#     addRec(dict)....
+if input("Would you like to add recommendation? y/n: ").lower() == 'y'.strip():
+    imagechoice = input("Which image would you like to add a recommendation to?: [enter image ID #] ")
+    addRec(dict)
+
+
 
 ##################################################################################
 # # RESET ORIGINAL DATASET
