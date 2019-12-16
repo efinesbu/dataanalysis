@@ -18,11 +18,9 @@ pd.set_option('display.max_rows', 100)
 # FUNCTIONS
 
 class MyTrendReq(TrendReq):
+    """Request data from Google Daily Trends section and returns a dataframe"""
     REAL_TIME_TRENDS_URL = 'https://trends.google.com/trends/api/realtimetrends'
-
     def real_time_data(self, pn='US', category = 'all'):
-        """Request data from Google Daily Trends section and returns a dataframe"""
-
         forms = {'geo': pn,
                  'tz': '300',
                  'hl': 'en-US',
@@ -36,21 +34,18 @@ class MyTrendReq(TrendReq):
             url=MyTrendReq.REAL_TIME_TRENDS_URL,
             method=TrendReq.GET_METHOD,
             trim_chars=5,
-            params=forms
-        )
-
+            params=forms)
         req_json = req_json['storySummaries']['trendingStories']
         df = pd.DataFrame.from_dict(req_json, orient='columns')
         return df
 
     ##################################################################################
     def update(self, df):
-
-        trendfile = 'C:/Users/efine/PycharmProjects/dataanalysis/Data/trenddata.xlsx'  # CSV location of audit
+        trendfile = 'C:/Users/Emil/PycharmProjects/dataanalysis/Data/trenddata.xlsx'
         writer = pd.ExcelWriter(trendfile, engine='xlsxwriter')
         audit_table = pd.read_excel(trendfile)
-        appended_audit = audit_table.append(df, sort=False)  # Add new audit to existing log
-        appended_audit.to_excel(writer, sheet_name='Audit', index=False)  # Save audit file
+        appended_audit = audit_table.append(df, sort=False)  # Populate file
+        appended_audit.to_excel(writer, sheet_name='Audit', index=False)  # Save file
         print("Saving Updated File with New Data")
 
         writer.save()
@@ -86,9 +81,10 @@ class MyTrendReq(TrendReq):
 
     ##################################################################################
     def compare(self, df):
-        trendfile = 'C:/Users/efine/PycharmProjects/dataanalysis/Data/trenddata.xlsx'
+        trendfile = 'C:/Users/Emil/PycharmProjects/dataanalysis/Data/trenddata.xlsx'
         old_table = pd.read_excel(trendfile)
         old_set = set(old_table["URL"])
+        print("Previous File Length:", len(old_set))
         realtime_set = set(df["URL"])
         new = realtime_set-old_set
         new_titles = df[df['URL'].isin(new)]                             # NEW TITLES
@@ -106,7 +102,8 @@ class MyTrendReq(TrendReq):
         updated_table.to_excel(writer, sheet_name='Audit', index=False)  # Save audit file
         writer.save()
         writer.close()
-        print("Trend File has been updated with%3d new titles" % (len(new_titles)))
+        print("Trend File has been updated with%3d new titles"%(len(new_titles)))
+        print("Total File length is:", len(updated_table))
 
     ##################################################################################
 
@@ -117,6 +114,6 @@ pytrend = MyTrendReq()
 rt = pytrend.real_time_data()
 df = pytrend.build(rt)
 df = pytrend.clean(df)
-print("Real time count: ", len(df.sort_values(by='timesort', ascending=False)))
+print("Real time count:", len(df.sort_values(by='timesort', ascending=False)))
 # pytrend.update(df)                                                          # Only run once to create baseline
 df = pytrend.compare(df)
