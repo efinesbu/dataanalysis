@@ -14,10 +14,16 @@ pd.set_option('display.max_rows', 40)
 #FUNCTIONS
 
 #Add New Recommendation
-def addRec(rec):
+def addRec(dict):
+    rec = input("Add new recommendation: ")
     dict['MetaData']['Recommendations'].append(rec)
     print(dict['MetaData']['Recommendations'])
 
+def save(dict):
+    dd.io.save('C:/Users/efine/PycharmProjects/dataanalysis/Data/test2.h5', dict)
+
+def load():
+    return dd.io.load('./Data/test2.h5')
 
 ##################################################################################
 
@@ -32,16 +38,13 @@ dict = {'IDs': [1],
                 'Users': ["User Name"]
           }}
 
+# Save data in H5f format
+save(dict)
+dictload = load()
+
+
 # Add New Recommendation
-addRec(rec = input("Add new recommendation: "))
-
-
-# # Save data in H5f foromat
-# dd.io.save('C:/Users/efine/PycharmProjects/dataanalysis/Data/test2.h5', dict)
-#
-# # Load data
-# dictload = dd.io.load('./Data/test2.h5')
-
+addRec(dictload)
 
 # Parse data
 # cv2.imshow("Image", dictload['ImgData'])
