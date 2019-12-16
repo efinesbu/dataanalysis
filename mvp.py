@@ -21,6 +21,21 @@ def addRec(imgList):
     save(imgList)
     return imgList
 
+# SEE RECOMMENDATIONS
+def seeRec(imgList):
+    print()
+    imagechoice = int(input("Which image would you like to see recommendations for?: [enter image ID #] ").strip())-1
+    print(imgList[imagechoice]['MetaData']['Recommendations'])
+
+# SEE ALL IMAGES
+def seeImg(imgList):
+    print()
+    for x in imgList:
+        print('ID #:', x['ID'], x['Label'])
+    print()
+    imagechoice = int(input("Which onversation would you like to see?: [enter ID #] ").strip())-1
+    showImg(imgList[imagechoice]['ImgData'])
+
 # SAVE in H5F Format
 def save(imgList):
     dd.io.save('./Data/test3.h5', imgList)
@@ -61,21 +76,22 @@ def showImg(imgData):
 
 imgList = load()
 
-if input("Add new image? y/n: ").lower() == 'y'.strip():
+if input("Add new onversation? y/n: ").lower() == 'y'.strip():
     imgData = addImg(imgList)
 print()
 
-if input("See image options? y/n: ").lower() == 'y'.strip():
-    for x in imgList:
-        print(x['Label'], x['ID'])
-    print()
-    imagechoice = int(input("Which image would you like to see?: [enter ID #] ").strip())-1
-    showImg(imgList[imagechoice]['ImgData'])
+if input("See all existing conversations? y/n: ").lower() == 'y'.strip():
+    seeImg(imgList)
 print()
 
 if input("Would you like to add recommendation? y/n: ").lower() == 'y'.strip():
     imgList = addRec(imgList)
 print()
+
+if input("Would you like to see existing recommendations? y/n: ").lower() == 'y'.strip():
+    seeRec(imgList)
+print()
+
 
 ##################################################################################
 # # RESET ORIGINAL DATASET STRUCTURE
@@ -95,6 +111,15 @@ print()
 # save(imgList)
 ##################################################################################
 
-# TO DO
-# Confirm link works
-# Resize if necessary
+'''
+# Backlog
+Confirm link works
+Resize if necessary
+Accounts
+Recommendations per accout
+Identify creator
+Creator selection
+Where to store client account data
+
+
+'''
