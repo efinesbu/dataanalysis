@@ -23,7 +23,7 @@ dict = {'ID': "Img ID",
 
 dd.io.save('C:/Users/efine/PycharmProjects/dataanalysis/Data/test2.h5', dict)
 
-dictload = dd.io.load('C:/Users/efine/PycharmProjects/dataanalysis/Data/test2.h5')
+dictload = dd.io.load('./Data/test2.h5')
 
 
 cv2.imshow("Image", dictload['ImgData'])
