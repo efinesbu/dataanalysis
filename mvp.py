@@ -13,7 +13,7 @@ pd.set_option('display.max_rows', 40)
 ##################################################################################
 #FUNCTIONS
 
-#Add New Recommendation
+# ADD NEW RECOMMENDATION
 def addRec(dict):
     rec = input("Add new recommendation: ")
     dict['MetaData']['Recommendations'].append(rec)
@@ -30,7 +30,9 @@ def load():
 # ADD IMAGE
 def addImg(dict):
 
-    # imgPath = './Data/emilfine2.jpg', './Data/test.jpg'
+    #  ./Data/emilfine2.jpg
+    #  ./Data/test.jpg
+
     imgPath = input("Enter Path: ")
     img_gray = cv2.imread(imgPath, cv2.IMREAD_GRAYSCALE) # Load Image in Grayscale
     id = len(dict['IDs'])+1
@@ -55,7 +57,7 @@ dict = load()
 # print(dict['IDs'])
 # print(dict['MetaData'])
 # print(dict['Label'])
-# print(dict['MetaData'])
+print(dict['MetaData'][0])
 
 # if input("Add new image? y/n: ").lower() == 'y'.strip():
 #     imgData = addImg(dict)
@@ -79,10 +81,10 @@ dict = load()
 # dict = {'IDs': [1],
 #         'Label': ["Emil Fine Image"],
 #         'ImgData': [img_gray],
-#         'MetaData': {
+#         'MetaData': [{
 #                 'Recommendations': ["Some Text"],
 #                 'Users': ["Advisor ID"]
 #
-#           }}
+#           }]}
 # save(dict)
 ##################################################################################
