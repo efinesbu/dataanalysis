@@ -48,11 +48,22 @@ def addImg(dict):
 
 dict = load()
 
-if input("Add image? Yes/No: ") == 'Yes':
-    imgData = addImg(dict)
+# if input("Add new image? y/n: ").lower() == 'y'.strip():
+#     imgData = addImg(dict)
+
+if input("See image options? y/n: ").lower() == 'y'.strip():
+    print(dict['MetaData']['Label'])
+    imagechoice = input("Which image would you like to see?: [enter index, from 0] ")
+    cv2.imshow("image", dict['ImgData'][int(imagechoice)])
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 
-# # Reset original dataset
+    # addRec(dict)
+
+##################################################################################
+# # # RESET ORIGINAL DATASET
+#
 # imgPath = './Data/emilfine2.jpg'
 # img_gray = cv2.imread(imgPath, cv2.IMREAD_GRAYSCALE) # Load Image in Grayscale
 #
@@ -60,11 +71,11 @@ if input("Add image? Yes/No: ") == 'Yes':
 #         'ImgData': [img_gray],
 #         'MetaData': {
 #                 'Recommendations': ["Say Hi"],
-#                 'Users': ["User Name"],
-#                 'Label': []
+#                 'Users': ["Advisor"],
+#                 'Label': ["Emil Fine Image"]
 #           }}
 # save(dict)
-
+##################################################################################
 
 # dictload = load()
 #
