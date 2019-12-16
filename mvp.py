@@ -28,31 +28,48 @@ def load():
     return dd.io.load('./Data/test2.h5')
 
 # ADD IMAGE
-def addImg():
-    imgPath = './Data/emilfine2.jpg'
+def addImg(dict):
+
+    # imgPath = './Data/emilfine2.jpg'
+    imgPath = input("Enter Path: ")
     img_gray = cv2.imread(imgPath, cv2.IMREAD_GRAYSCALE) # Load Image in Grayscale
-    # ex = np.expand_dims(img_gray, axis=2)
-    return img_gray
+    id = len(dict['IDs'])+1
+    dict['IDs'].append(id)
+    dict['ImgData'].append(img_gray)
+    dict['MetaData']['Recommendations'] = []
+    dict['MetaData']['Users'] = []
+    dict['MetaData']['Label'].append(imgPath)
+    save(dict)
+    return dict
 
 
 ##################################################################################
-#MAIN
+# MAIN
 
-imgData = addImg()
+dict = load()
 
-# Create data structure
-dict = {'IDs': [1],
-        'ImgData': [imgData],
-        'MetaData': {
-                'Recommendations': ["Say Hi"],
-                'Users': ["User Name"]
-          }}
+if input("Add image? Yes/No: ") == 'Yes':
+    imgData = addImg(dict)
 
-save(dict)
-dictload = load()
 
-# Add New Recommendation
-addRec(dictload)
+# # Reset original dataset
+# imgPath = './Data/emilfine2.jpg'
+# img_gray = cv2.imread(imgPath, cv2.IMREAD_GRAYSCALE) # Load Image in Grayscale
+#
+# dict = {'IDs': [1],
+#         'ImgData': [img_gray],
+#         'MetaData': {
+#                 'Recommendations': ["Say Hi"],
+#                 'Users': ["User Name"],
+#                 'Label': []
+#           }}
+# save(dict)
+
+
+# dictload = load()
+#
+# # Add New Recommendation
+# addRec(dictload)
 
 # Parse data
 # cv2.imshow("Image", dictload['ImgData'])
