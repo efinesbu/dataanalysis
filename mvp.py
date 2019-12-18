@@ -40,7 +40,12 @@ def seeImg(imgList):
 
 # SHOW IMAGE SELECTION IN WINDOW
 def showImg(imgData):
-    cv2.imshow("Image", imgData)
+    percent = 60
+    w = int(imgData.shape[1] * percent / 100)
+    h = int(imgData.shape[0] * percent / 100)
+    dim = (w,h)
+    img = cv2.resize(imgData, dim, interpolation=cv2.INTER_AREA)
+    cv2.imshow("Image", img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
@@ -77,13 +82,17 @@ def addImg(imgList):
 ##################################################################################
 # MAIN
 
-
+##################################################################################
+# USER
 imgList = load()
 
 if input("Add new onversation? y/n: ").lower() == 'y'.strip():
     imgData = addImg(imgList)
 print()
 
+##################################################################################
+
+# ADVISOR
 if input("See all existing conversations? y/n: ").lower() == 'y'.strip():
     seeImg(imgList)
 print()
@@ -100,11 +109,11 @@ print()
 ##################################################################################
 # # RESET ORIGINAL DATASET STRUCTURE
 
-# imgPath = './Data/emilfine2.jpg'
+# imgPath = './Data/convo1.jfif'
 # img_gray = cv2.imread(imgPath, cv2.IMREAD_GRAYSCALE) # Load Image in Grayscale
 #
 # imgList = [{'ID': 1,
-#             'Label': "Emil Fine Image",
+#             'Label': imgPath,
 #             'ImgData': img_gray,
 #             'MetaData': {
 #                 'Recommendations': [],
@@ -125,5 +134,7 @@ Identify creator
 Creator selection
 Where to store client account data
 
+Build Amazon RDS based DB
+Build Finite State Machine
 
 '''
