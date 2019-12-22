@@ -1,9 +1,21 @@
 from flask import Flask
 app = Flask(__name__)
 
+
+@app.route("/")
+def homepage():
+
+    return """<h1>Welcome to the homepage</h1>
+    <ol>
+      <li> <a href="ha">say ha</a></li>
+      <li> <a href="hi">say hi</a></li>
+    </ol>
+    """
+
 @app.route("/ha")
 def hello1():
     return "<h1>Not Much Going On Here, but ha</h1>"
+
 @app.route("/hi")
 def hello2():
     return "<h1>Not Much Going On Here but hi</h1>"
