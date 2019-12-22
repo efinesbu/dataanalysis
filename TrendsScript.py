@@ -6,7 +6,8 @@ import xlsxwriter
 from datetime import date
 import dateparser
 import re
-##################################################################################
+import time
+########################################################################################################################
 # INCREASE DEFAULT COLUMN VISIBILITY
 
 desired_width = 500
@@ -14,17 +15,17 @@ pd.set_option('display.width', desired_width)
 pd.set_option('display.max_columns', 26)
 pd.set_option('display.max_rows', 100)
 
-##################################################################################
+########################################################################################################################
 # FUNCTIONS
 
 class MyTrendReq(TrendReq):
     """Request data from Google Daily Trends section and returns a dataframe"""
     REAL_TIME_TRENDS_URL = 'https://trends.google.com/trends/api/realtimetrends'
-    def real_time_data(self, pn='US', category = 'all'):
-        forms = {'geo': pn,
-                 'tz': '300',
-                 'hl': 'en-US',
-                 'cat': 'm',
+    def real_time_data(self):
+        forms = {'geo': 'US', # Location
+                 'tz': '300', # TimeZone
+                 'hl': 'en-US', # Language
+                 'cat': 'm', #Category m = health
                  'fi': '0',
                  'fs': '0',
                  'ri': '300',
@@ -54,6 +55,7 @@ class MyTrendReq(TrendReq):
     ##################################################################################
     def clean(self, df):
         df = df.replace(to_replace=r'&#39;', value="'", regex=True) # Replace characters
+        df = df.replace(to_replace=r'&nbsp;', value="... read more, link below!...", regex=True)  # Replace characters
         df = df.drop_duplicates(subset="URL")
         return df
     ##################################################################################
@@ -77,6 +79,7 @@ class MyTrendReq(TrendReq):
                          'imageUrl': image.get('imgUrl'),
                          'timesort': dateparser.parse(article['time'])})
         df2 = pd.DataFrame.from_dict(dict, orient='columns')
+
         return df2
 
     ##################################################################################
@@ -88,17 +91,26 @@ class MyTrendReq(TrendReq):
         realtime_set = set(df["URL"])
         new = realtime_set-old_set
         new_titles = df[df['URL'].isin(new)]                             # NEW TITLES
-
+        updated_table = old_table.append(new_titles, sort=False)         # Add new to old titles, false keeps col order
         ##################################################################################
-        for i, row in old_table.iterrows():
+        # ADD HASHTAGS
+        for i, row in updated_table.iterrows():
             title = row['Title']
             hashtag = re.sub(r"([A-Za-z0-9!@#$%^&*()]+)", r"#\1", title)
             hashtag = re.sub(r",", r"", hashtag)
-            old_table.at[i, 'Hashtag'] = hashtag
+            updated_table.at[i, 'Hashtag'] = hashtag
+        ##################################################################################
+        # MERGE CONTENT
+        for i, row in updated_table.iterrows():
+            articleTitle = row['Article Title']
+            snippet = row['Snippet']
+            url = row['URL']
+            hashtag = row['Hashtag']
+            updated_table.at[i, 'Content'] = articleTitle + '\n\n' + snippet + '\n\n' + url + '\n\n' + hashtag
 
         ##################################################################################
         writer = pd.ExcelWriter(trendfile, engine='xlsxwriter')          # Initiate writer
-        updated_table = old_table.append(new_titles, sort=False)         # Add new to old titles, false keeps col order
+        updated_table = updated_table.sort_values(by=['timesort'], ascending=False)
         updated_table.to_excel(writer, sheet_name='Audit', index=False)  # Save audit file
         writer.save()
         writer.close()
@@ -107,13 +119,39 @@ class MyTrendReq(TrendReq):
 
     ##################################################################################
 
-##################################################################################
+########################################################################################################################
 # MAIN
 
-pytrend = MyTrendReq()
-rt = pytrend.real_time_data()
-df = pytrend.build(rt)
-df = pytrend.clean(df)
-print("Real time count:", len(df.sort_values(by='timesort', ascending=False)))
-# pytrend.update(df)                                                          # Only run once to create baseline
-df = pytrend.compare(df)
+while True:
+    pytrend = MyTrendReq()
+    rt = pytrend.real_time_data()
+    df = pytrend.build(rt)
+    df = pytrend.clean(df)
+    print("Real time count:", len(df))
+    # pytrend.update(df)                                                          # Only run once to create baseline
+    df = pytrend.compare(df)
+    time.sleep(900) # run every 15min
+
+########################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+''' NOTES FOR LATER '''
+# # Download images from URL | Use this when the systems knows which article to pst (Post clasification)
+# import urllib.request
+# urllib.request.urlretrieve("URL", "local-filename.jpg")
