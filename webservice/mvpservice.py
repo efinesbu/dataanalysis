@@ -4,12 +4,20 @@ app = Flask(__name__)
 
 @app.route("/")
 def homepage():
+    request = app.request
 
-    return """<h1>Welcome to the homepage</h1>
+    return f"""<h1>Welcome to the homepage</h1>
+        {request}
     <ol>
-      <li> <a href="ha">say ha</a></li>
+      <li> <a href="upload">say ha</a></li>
       <li> <a href="hi">say hi</a></li>
     </ol>
+    """
+
+@app.route("/upload")
+def upload():
+    return """
+    for to 
     """
 
 @app.route("/ha")
