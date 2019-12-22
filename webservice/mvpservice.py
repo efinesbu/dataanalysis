@@ -1,5 +1,8 @@
 from flask import Flask, request
 import platform
+import tempfile
+import os
+
 app = Flask(__name__)
 
 
@@ -18,15 +21,19 @@ def homepage():
       <li> <a href="hi">say hi</a></li>
     </ol>
     """
+def name():
+    return "pic"
+
+NAME = 'pic'
 
 @app.route("/upload")
 def upload():
-    return """
+    return f"""
 <div class="container">
   <hr><h3>Contact Us: </h3><hr><p></p>  <p><span class="error">* required field</span></p>
-  <form action="submit", method="post">
+  <form action="submit", method="post", enctype="multipart/form-data">
   
-  <input type="file" name="pic" accept="image/*">
+  <input type="file" name={NAME} accept="image/* ">
 
     <label for="fname">First Name</label>
     <input id="fname" name="firstname" placeholder="Your name.." type="text">
@@ -53,16 +60,57 @@ def upload():
 </div> 
     """
 
+
+def allowed_file(filename):
+    pass
+
+
 @app.route("/submit", methods=['GET','POST'])
 def receivedata():
+    filename = tempfile.mktemp() # [suffix = ''[, prefix = 'tmp'[, dir = None]]])
+
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if NAME not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files[NAME]
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            #flash('No selected file')
+            return redirect(request.url)
+        if file: # and allowed_file(file.filename):
+            # filename = secure_filename(file.filename)
+            filename, file_extension = os.path.splitext(file.filename)
+            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            filename = tempfile.mktemp(suffix=file_extension) # [, prefix = 'tmp'[, dir = None]]])
+            print(filename)
+            file.save(filename)
+            return f"""
+                <hr>
+                save = {filename}
+                <hr>
+            """
+            return redirect(url_for('uploaded_file',
+                                    filename=filename))
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
+    
+    files = request.files
     return f"""<code>
         {request}<br>
 <hr>
         {request.headers}<br>
 <hr>
-        {request.get_data()}<br>
-<hr>
-        {request.files}
+        {files}<br>
 </code>
 """
 
