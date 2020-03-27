@@ -1,6 +1,6 @@
 ########################################################################################################################
 
-# This is the original local version. Please see mvpcloud file and webservice folder for current cloud version
+# ***** This is the original local version. Please see WebApp GitHub Branch for latest files *****
 
 # GOAL: Allow a user to upload an image, Allow Advisor to pull existing Image and add a comment.
 
