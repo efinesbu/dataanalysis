@@ -1,3 +1,11 @@
+########################################################################################################################
+
+# This is the original local version. Please see mvpcloud file and webservice folder for current cloud version
+
+# GOAL: Allow a user to upload an image, Allow Advisor to pull existing Image and add a comment.
+
+########################################################################################################################
+
 import pandas as pd
 import cv2
 import deepdish as dd
