@@ -1,3 +1,15 @@
+########################################################################################################################
+
+#GOAL: Create content database of trending articles for marketing
+
+# This script extends an unofficial Google Trends API
+# It adds a missing request for Real-Time data
+# It creates an initial excel spreadsheet with the downloaded dataframe
+# New articles are added into the existing spreadsheet when re-run
+# Article data is cleaned, split up, and hashtags generated based on title
+
+########################################################################################################################
+
 from pytrends.request import TrendReq
 import pandas as pd
 import numpy as np
